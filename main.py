@@ -50,43 +50,53 @@ def getTriColour(tri, inp):
         colours[index] = np.array(array).mean(axis=0)
     return colours # Returns mapping from index to colour
 
-def draw(tri, colours, fileName):
-    _, ax = plt.subplots()
+def draw(tri, colours, w, h, fileName, show=False, png=False):
+    fig, ax = plt.subplots()
     for key, c in colours.items():
         t = tri.points[tri.simplices[key]]
         ax.fill(*t.T, color=tuple(c/255), edgecolor=tuple(c/255))
-    plt.gca().set_axis_off()
+    ax.set_axis_off()
     plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, hspace = 0, wspace = 0)
     plt.margins(0,0)
-    plt.gca().xaxis.set_major_locator(plt.NullLocator())
-    plt.gca().yaxis.set_major_locator(plt.NullLocator())
-    plt.savefig(fileName, bbox_inches='tight', pad_inches=0)
+    ax.xaxis.set_major_locator(plt.NullLocator())
+    ax.yaxis.set_major_locator(plt.NullLocator())
+    fig.set_size_inches(72/5*w/h, 72/5)
+    if png:
+        plt.savefig(fileName, bbox_inches='tight', pad_inches=0)
+    else:
+        plt.savefig(fileName, bbox_inches='tight', pad_inches=0)
+    if show:
+        plt.show()
+    plt.close(fig)
 
 def main() :
-    fileName = 'coot penguin.jpg'
+    rollout = True
+
+    fileName = 'spiderverse wallpaper.jpg'
+    filetype = 'png'
     name, extension = re.match(r'(.*?)\.(.+)', fileName).groups()
-    # upscale = 1
-    sensitivity = 19706 
+    sensitivity = 2000 
     sigma = (2, 10)
     rAlpha = False
-    fn = f'output/penguinSVG/{sensitivity}-{sigma[0]}-{sigma[1]}-{name}.svg'
+    fn = f'output/{sensitivity}-{sigma[0]}-{sigma[1]}-{name}.{filetype}'
     if extension == 'png':
         inp, diff = initialProcessing(fileName, *sigma, removeAlpha=True)
     else:
         inp, diff = initialProcessing(fileName, *sigma, removeAlpha=rAlpha)
     samples, _ = sample(diff)
-
     w, h, _ = inp.shape
     corners = np.array([(0,0), (0,h-1), (w-1,0), (w-1,h-1)])
     points = np.concatenate((corners, samples))
 
-    for i in range(100):
-        n = i+5+2*int(i**2)
-        tri = Delaunay(points[:n,:])
-        draw(tri, getTriColour(tri, inp), fn)
-
-#    tri = Delaunay(points[:sensitivity,:])
-#    draw(tri, getTriColour(tri, inp), fn)
+    if rollout:
+        for i in range(100):
+            n = i+5+2*int(i**2)
+            fn = f'output/spiderverse/{n}-{sigma[0]}-{sigma[1]}-{name}.{filetype}'
+            tri = Delaunay(points[:n,:])
+            draw(tri, getTriColour(tri, inp), w, h, fn)
+    else:
+        tri = Delaunay(points[:sensitivity,:])
+        draw(tri, getTriColour(tri, inp), w, h, fn, show=True)
 
 if __name__ == '__main__' : 
     main()
