@@ -8,13 +8,10 @@ from PIL import Image
 
 def initialProcessing(imageName, sigma1, sigma2, showProcess = False, removeAlpha = False) :
     image = np.flip(plt.imread(f'input/{imageName}').transpose(1,0,2), 1)
-    with open('debug', 'w+') as f:
-        for i in image:
-            f.write(f'{i}\n')
     if removeAlpha:
         image = image[:,:,:-1] * 255
     perceptualWeight = np.array([0.213, 0.715, 0.072])
-    grayscale = (image * perceptualWeight).sum(axis=-1)
+    grayscale = np.dot(image, perceptualWeight)
     x1 = gaussian_filter(grayscale, sigma=sigma1)
     x2 = gaussian_filter(grayscale, sigma=sigma2)
     diff = x2 - x1
@@ -87,12 +84,11 @@ def saveAsGif(folderName, outName):
 
 def main():
     rollout = True
-    fileName = 'balconyCat.jpg' 
-    filetype = 'png'
-    sensitivity = 5000 
-    sigma = (2, 25)
+    fileName = 'IMG_0262.jpg' 
+    filetype = 'png' # Output file type - PNG recommended
+    sigma = (2, 25) # Standard deviations of gaussian filters used to blur images to identify edges
     rAlpha = False # Manual control if an image doesn't work despite not being a PNG
-    show = False
+    show = False # Show gaussian filters on image
 
     name, extension = re.match(r'(.*?)\.(.+)', fileName).groups()
     if extension == 'png':
@@ -107,15 +103,15 @@ def main():
     if rollout:
         for i in range(100):
             n = 3+i**2+int(0.02*i**3)
-            fn = f'output/balconyCat/{n}-{sigma[0]}-{sigma[1]}-{name}.{filetype}'
+            fn = f'output/cat2/{n}-{sigma[0]}-{sigma[1]}-{name}.{filetype}'
             tri = Delaunay(points[:n,:])
             draw(tri, getTriColour(tri, inp), w, h, fn)
+        saveAsGif('cat2', 'cat2gif')
     else:
+        sensitivity = 5000 
         tri = Delaunay(points[:sensitivity,:])
         fn = f'output/{sensitivity}-{sigma[0]}-{sigma[1]}-{name}.{filetype}'
         draw(tri, getTriColour(tri, inp), w, h, fn, show=True)
-
-    saveAsGif('balconyCat', 'balconyCatGif')
 
 if __name__ == '__main__' : 
     main()
