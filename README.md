@@ -8,6 +8,21 @@ The points selected in the random sample are ran through a Delaunay triangulatio
 
 You can choose to perform a rollout in which varying samples of the points generated are taken, using the function `int(3+x**2+0.02x**3)` over 100 steps. This is then used to generate a GIF (Note: The bit depth gets NUKED by being saved as a GIF). Alternatively, if you don't perform a rollout then you can choose the exact sensitivity. This has to be less than the number of returned samples. Considering there are 1 000 000 samples taken, the expectation of the number of samples returned is going to vary. If your image is very detailed you can expect to be able to take the sensitivity quite high without getting an ArgumentOutOfRange error, but if it's not then it'll be something like 100 000. In rollouts the highest value ends up being 29 209 which has worked fine for everything so far, and I wouldn't take it too much farther (maybe like 80 000). 
 
+# Gallery
+
+![Discovery Sensitivity 7](./gallery/readme/7-2-50-discovery.png)
+![Discovery Sensitivity 30](./gallery/readme/30-2-50-discovery.png)
+![Discovery Sensitivity 7269](./gallery/readme/7269-2-50-discovery.png)
+![M87 Black hole Sensitivity 746](./gallery/readme/746-2-10-blackhole.png)
+![M87 Black hole Sensitivity 3086](./gallery/readme/3086-2-10-blackhole.png)
+![M87 Black hole Sensitivity 7026](./gallery/readme/7026-2-10-blackhole.png)
+![SpiderverseSensitivity 83](./gallery/83-2-10-spiderverse&#32;wallpaper.png)
+![Spiderverse Sensitivity 9596](./gallery/readme/9596-2-10-spiderverse&#32;wallpaper.png)
+![Spiderverse Sensitivity 19706](./gallery/readme/19706-2-10-spiderverse&#32;wallpaper.png)
+![Vast Universe Sensitivity 6068](./gallery/readme/6068-2-25-2637581.png)
+![My cat Sensitivity 29209](./gallery/readme/29209-2-15-IMG_0246.png)
+![Balcony Cat Sensitivity 29209](./gallery/readme/29209-2-25-balconyCat.png)
+
 # Credit
 
 This program is based on the program written by Samuel Hinton that can be found [here](https://cosmiccoding.com.au/tutorials/lowpoly). I've made a fair few changes to it, however I use their sampling method untouched (at least, as far as I remember I haven't made any changes to it).
